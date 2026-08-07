@@ -50,3 +50,5 @@ dialog h2{margin-top:0}label{display:grid;gap:.35rem;margin:.8rem 0}input,select
 .toast{position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,120px);background:var(--dark);color:#f8e8b4;padding:.8rem 1rem;border:1px solid var(--gold);border-radius:6px;transition:.2s;z-index:40}.toast.show{transform:translate(-50%,0)}
 @media(max-width:850px){.dashboard-grid{grid-template-columns:1fr}.day{min-height:82px}.stats-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){main{padding:.55rem}.date-card{align-items:flex-start;flex-direction:column}.date-actions{width:100%}.date-actions button{flex:1}.calendar-card{overflow-x:auto}.weekdays,.calendar-grid{min-width:680px}.day{min-height:95px}.legend{min-width:680px}.stats-grid{grid-template-columns:1fr 1fr}}
+
+.player-mode .dm-only,.player-mode .date-actions,.player-mode .panel-head .text-btn,.player-mode .item-actions{display:none!important}

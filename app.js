@@ -2,7 +2,10 @@
 const MONTHS = ["Morning Star", "Sun's Dawn", "First Seed", "Rain's Hand", "Second Seed", "Summertide", "Sun's Height", "Last Seed", "Amberfall", "Frostfall", "Sun's Dusk", "Evening Star"];
 const HOLIDAYS = [{"month": 0, "day": 1, "name": "New Dawn", "deity": "The Changebringer"}, {"month": 1, "day": 7, "name": "Day of Challenging", "deity": "The Stormlord"}, {"month": 2, "day": 21, "name": "Heart's Fire", "deity": "The Eternal Flame"}, {"month": 3, "day": 17, "name": "Whelm's Gift", "deity": "The Tide Tempest"}, {"month": 4, "day": 2, "name": "Harvest Dawn", "deity": "The Stonesoul"}, {"month": 4, "day": 19, "name": "Deep Solace", "deity": "The Allhammer"}, {"month": 5, "day": 1, "name": "Midsummer", "deity": "The Archeart"}, {"month": 5, "day": 21, "name": "Elvendawn", "deity": "Arcanus"}, {"month": 6, "day": 28, "name": "Highsummer", "deity": "The Dawnfather"}, {"month": 8, "day": 22, "name": "Valor's Dawn", "deity": "The Lawbearer"}, {"month": 8, "day": 28, "name": "High Harvest", "deity": "The Tide Tempest"}, {"month": 10, "day": 5, "name": "Embertide", "deity": "The Platinum Dragon"}, {"month": 11, "day": 21, "name": "Winter's Crest", "deity": "The Archeart"}];
 const DAYS_PER_MONTH = 28;
-const STORAGE_KEY = "tele_calendar_v1";
+const STORAGE_KEY = "tele_calendar_v2";
+const DM_MODE_KEY = "tele_calendar_dm_mode";
+const SHARED_DATA_URL = "./campaign-data.json";
+let isDM = localStorage.getItem(DM_MODE_KEY) === "true";
 const TYPES = {
   adventure:"Adventure", travel:"Travel", downtime:"Downtime", crafting:"Crafting", rest:"Rest"
 };
@@ -22,11 +25,30 @@ function clone(x){return JSON.parse(JSON.stringify(x));}
 function loadState(){
   try {
     const raw=localStorage.getItem(STORAGE_KEY);
-    if(!raw) return clone(defaultState);
-    return Object.assign(clone(defaultState),JSON.parse(raw));
-  } catch(e){ return clone(defaultState); }
+    if(raw) return Object.assign(clone(defaultState),JSON.parse(raw));
+  } catch(e){}
+  return clone(defaultState);
 }
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function saveState(){
+  if(isDM) localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+}
+async function loadSharedState(){
+  try{
+    const res=await fetch(`${SHARED_DATA_URL}?v=${Date.now()}`,{cache:"no-store"});
+    if(!res.ok) throw new Error("Shared calendar unavailable");
+    const shared=Object.assign(clone(defaultState),await res.json());
+    if(isDM){
+      if(!localStorage.getItem(STORAGE_KEY)) state=shared;
+    }else{
+      state=shared;
+    }
+    render();
+    updateModeUI();
+  }catch(err){
+    updateModeUI();
+    toast("Could not load shared calendar");
+  }
+}
 function key(d){return `${d.year}-${d.month}-${d.day}`;}
 function ordinal(d){return d.year*336+d.month*28+(d.day-1);}
 function fromOrdinal(n){
@@ -40,6 +62,17 @@ function formatDate(d){return `${MONTHS[d.month]} ${d.day}, ${d.year} TA`;}
 function weekday(d){return ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"][ordinal(d)%7];}
 function holidayFor(month,day){return HOLIDAYS.find(h=>h.month===month&&h.day===day);}
 function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200);}
+
+function updateModeUI(){
+  document.body.classList.toggle("player-mode",!isDM);
+  $("modeText").textContent=isDM?"DM Mode":"Player View";
+  $("toggleDmBtn").textContent=isDM?"Switch to Player View":"Enable DM Mode";
+}
+function requireDM(){
+  if(isDM) return true;
+  toast("Player view is read-only");
+  return false;
+}
 
 function render(){
   $("currentDateText").textContent=formatDate(state.current);
@@ -107,6 +140,7 @@ function renderEvents(){
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
 
 function advance(days,type,note){
+  if(!requireDM()) return;
   for(let i=0;i<days;i++) {
     const d=addDays(state.current,1);
     if(type||note) state.days[key(d)]={...(state.days[key(d)]||{}),type,notes:note||""};
@@ -117,6 +151,7 @@ function advance(days,type,note){
   render(); if(due.length) toast(`World event: ${due[0].name}`); else toast(`Advanced ${days} day${days===1?"":"s"}`);
 }
 function openDay(d){
+  if(!requireDM()) return;
   const rec=state.days[key(d)]||{};
   $("dayDialogTitle").textContent=formatDate(d);
   $("dayKeyInput").value=key(d); $("dayTypeInput").value=rec.type||""; $("dayNotesInput").value=rec.notes||"";
@@ -128,8 +163,8 @@ $("dayForm").addEventListener("submit",e=>{
   state.days[k]={type:$("dayTypeInput").value,notes:$("dayNotesInput").value.trim()};
   $("dayDialog").close(); render();
 });
-$("advanceDayBtn").onclick=()=>advance(1,"adventure","");
-$("advanceTimeBtn").onclick=()=>$("advanceDialog").showModal();
+$("advanceDayBtn").onclick=()=>{if(requireDM())advance(1,"adventure","");};
+$("advanceTimeBtn").onclick=()=>{if(requireDM())$("advanceDialog").showModal();};
 $("advanceForm").addEventListener("submit",e=>{
   if(e.submitter?.value==="cancel")return;e.preventDefault();
   const n=Math.max(1,parseInt($("advanceCountInput").value||1));
@@ -161,22 +196,40 @@ $("addCraftBtn").onclick=()=>simpleDialog("New Crafting Project",[{id:"name",lab
 $("addEventBtn").onclick=()=>simpleDialog("New World Event",[
   {id:"name",label:"Event name"},...dateFields(state.current),{id:"notes",label:"Notes"}
 ],v=>state.events.push({name:v.name||"Untitled Event",date:{year:+v.year,month:+v.month,day:+v.day},notes:v.notes||""}));
-window.endArc=i=>{state.arcs[i].ended=clone(state.current);render();};
-window.deleteArc=i=>{if(confirm("Delete this arc?")){state.arcs.splice(i,1);render();}};
-window.craftProgress=(i,n)=>{state.crafts[i].progress=Math.max(0,Math.min(state.crafts[i].total,state.crafts[i].progress+n));render();};
-window.deleteCraft=i=>{if(confirm("Delete this project?")){state.crafts.splice(i,1);render();}};
-window.deleteEvent=i=>{if(confirm("Delete this event?")){state.events.splice(i,1);render();}};
+window.endArc=i=>{if(!requireDM())return;state.arcs[i].ended=clone(state.current);render();};
+window.deleteArc=i=>{if(!requireDM())return;if(confirm("Delete this arc?")){state.arcs.splice(i,1);render();}};
+window.craftProgress=(i,n)=>{if(!requireDM())return;state.crafts[i].progress=Math.max(0,Math.min(state.crafts[i].total,state.crafts[i].progress+n));render();};
+window.deleteCraft=i=>{if(!requireDM())return;if(confirm("Delete this project?")){state.crafts.splice(i,1);render();}};
+window.deleteEvent=i=>{if(!requireDM())return;if(confirm("Delete this event?")){state.events.splice(i,1);render();}};
 
 const drawer=$("drawer"),scrim=$("scrim");
 function openDrawer(){drawer.classList.add("open");scrim.classList.add("open");drawer.setAttribute("aria-hidden","false");}
 function closeDrawer(){drawer.classList.remove("open");scrim.classList.remove("open");drawer.setAttribute("aria-hidden","true");}
 $("menuBtn").onclick=openDrawer;$("closeDrawerBtn").onclick=closeDrawer;scrim.onclick=closeDrawer;
 $("exportBtn").onclick=()=>{
+  if(!requireDM()) return;
   const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
-  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="tele-calendar-backup.json";a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="campaign-data.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("campaign-data.json downloaded");
 };
 $("importInput").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{state=Object.assign(clone(defaultState),JSON.parse(await f.text()));render();toast("Backup imported");closeDrawer();}catch{alert("That backup file could not be read.");}};
 $("clearDataBtn").onclick=()=>{if(confirm("Erase all locally saved calendar data?")){state=clone(defaultState);render();closeDrawer();}};
 
+$("toggleDmBtn").onclick=()=>{
+  isDM=!isDM;
+  localStorage.setItem(DM_MODE_KEY,String(isDM));
+  updateModeUI();
+  if(!isDM) loadSharedState();
+  else { saveState(); render(); }
+  closeDrawer();
+};
+$("refreshSharedBtn").onclick=()=>loadSharedState();
+
 if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
 render();
+updateModeUI();
+loadSharedState();

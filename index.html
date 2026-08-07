@@ -16,7 +16,7 @@
   <header>
     <div>
       <h1>Tel'Evandros Calendar</h1>
-      <p id="dateHeading">1095 of the Third Age</p>
+      <p id="dateHeading">1095 of the Third Age · <strong id="modeText">Player View</strong></p>
     </div>
     <button id="menuBtn" class="icon-btn" aria-label="Open tools">☰</button>
   </header>
@@ -83,11 +83,13 @@
 
 <aside id="drawer" class="drawer" aria-hidden="true">
   <div class="drawer-head"><h2>Campaign Tools</h2><button id="closeDrawerBtn">×</button></div>
-  <button id="setDateBtn">Set current date</button>
-  <button id="exportBtn">Export backup</button>
-  <label class="file-button">Import backup<input id="importInput" type="file" accept=".json,application/json"></label>
-  <button id="clearDataBtn" class="danger">Erase local data</button>
-  <p class="small">Your calendar saves automatically on this device.</p>
+  <button id="toggleDmBtn">Enable DM Mode</button>
+  <button id="refreshSharedBtn">Refresh Shared Calendar</button>
+  <button id="setDateBtn" class="dm-only">Set current date</button>
+  <button id="exportBtn" class="dm-only">Download Shared Update</button>
+  <label class="file-button dm-only">Import local backup<input id="importInput" type="file" accept=".json,application/json"></label>
+  <button id="clearDataBtn" class="danger dm-only">Erase local data</button>
+  <p class="small">Player View loads the published campaign-data.json. DM Mode saves edits on this device until you download and publish an update.</p>
 </aside>
 <div id="scrim" class="scrim"></div>
 

@@ -1,18 +1,16 @@
-TEL'EVANDROS CAMPAIGN CALENDAR
+TEL'EVANDROS SHARED CAMPAIGN CALENDAR
+Repository: Lupusfarstrider/televandros-calendar
 
-Open index.html to use the app.
+SETUP
+Upload every file in this folder to the root of your GitHub repository and overwrite the old versions.
 
-For best results on iPhone/iPad:
-1. Put this folder on a simple web host (GitHub Pages, Netlify, or similar).
-2. Open the site in Safari.
-3. Tap Share, then Add to Home Screen.
+USE
+1. Everyone opens the same GitHub Pages link.
+2. Player View automatically loads campaign-data.json and cannot edit.
+3. On your iPhone, open the menu and tap Enable DM Mode.
+4. Make your changes.
+5. Tap Download Shared Update.
+6. Replace campaign-data.json in GitHub and commit directly to main.
+7. Players refresh the calendar or tap Refresh Shared Calendar.
 
-The app works offline after the first visit and stores campaign data locally.
-Use Export Backup regularly, especially before clearing browser data.
-
-Calendar rules included:
-- 12 months
-- 28 days in every month
-- Monday through Sunday
-- Highsummer is Sun's Height 28
-- Default year: 1095 of the Third Age
+GitHub Pages may take a short time to publish after each commit.
