@@ -1,31 +1,192 @@
 {
   "current": {
     "year": 1095,
-    "month": 0,
-    "day": 1
+    "month": 3,
+    "day": 16
   },
   "view": {
     "year": 1095,
     "month": 3
   },
-  "days": {},
+  "days": {
+    "1095-3-4": {
+      "tags": [
+        "Adventure"
+      ],
+      "notes": "Lionel, John, Crixus, Thrack, Leucis, and Brim meet for the first time at a lonely seaside tavern, drawn together for a secret meeting. Though strangers to one another, their shared interests lead them to form an unlikely fellowship.\n\nAfter striking an agreement with the lord of Port Milton, the newly formed fellowship accepts its first quest: journey into the Ivy Hills and investigate the disappearance of the missing heir of House Hanur.",
+      "notePublic": true
+    },
+    "1095-3-5": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-6": {
+      "tags": [
+        "Adventure"
+      ],
+      "notes": "Following the trail of House Hanur’s missing heir, the fellowship ventures deeper into the Ivy Hills and discovers the ancient ruins of Dun’Krazak. Within the fallen dwarven stronghold, they contend with its goblinkin inhabitants as they search for Lerin Hanur and uncover what became of the missing expedition.",
+      "notePublic": true
+    },
+    "1095-3-7": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-8": {
+      "tags": [
+        "Rest"
+      ],
+      "notes": "Rescued Ser Lerin Hanur and Ser Yann Muller from the ruins of Dun’Krazak.\n\nLearned of Lupus Farstrider’s intentions for the secret meeting and discovered the existence of his evidence board through Ser Lerin.\n\nReturned to Hanur Hall to receive their rewards and spend the day as guests of House Hanur, before retiring to the Bargewright Inn for the night.",
+      "notePublic": true
+    },
+    "1095-3-9": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "Depart for Ivywood Shire, through the Narrow Valley",
+      "notePublic": true
+    },
+    "1095-3-10": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-11": {
+      "tags": [
+        "Adventure"
+      ],
+      "notes": "Following the leads uncovered at Hanur Hall, the fellowship travels into the Ivywood Shire to investigate Baron Boris Threnwick and his possible connection to the conspiracy. Seeking information from the Baron, they accept his contract to eliminate an ankheg infestation threatening his vineyard in exchange for his cooperation.",
+      "notePublic": true
+    },
+    "1095-3-12": {
+      "tags": [
+        "Rest",
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-13": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-14": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-15": {
+      "tags": [
+        "Adventure"
+      ],
+      "notes": "Arriving in Durengaard, the fellowship meets with the Lamplighters to share what they have uncovered and learn more about the conspiracy spreading throughout the empire. Afterwards, the party turns to a more personal matter, accompanying Leucis to the Wondrous Quill in pursuit of his Grimoire trial.",
+      "notePublic": true
+    },
+    "1095-3-16": {
+      "tags": [
+        "Rest"
+      ],
+      "notes": "",
+      "notePublic": false
+    }
+  },
   "customTags": [],
   "quickTags": [],
-  "arcs": [],
-  "quests": [
+  "arcs": [
     {
-      "name": "Farts for hire",
-      "arc": "",
-      "status": "Active",
+      "name": "Arc 1 - Shadows over Durendal",
       "start": {
         "year": 1095,
-        "month": 0,
-        "day": 1
+        "month": 3,
+        "day": 4
       },
-      "end": null,
+      "end": null
+    }
+  ],
+  "quests": [
+    {
+      "name": "The Lost Lordling",
+      "arc": "Arc 1 - Shadows over Durendal",
+      "status": "Completed",
+      "start": {
+        "year": 1095,
+        "month": 3,
+        "day": 4
+      },
+      "end": {
+        "year": 1095,
+        "month": 3,
+        "day": 8
+      },
+      "public": true
+    },
+    {
+      "name": "The Ankheg Job",
+      "arc": "Arc 1 - Shadows over Durendal",
+      "status": "Completed",
+      "start": {
+        "year": 1095,
+        "month": 3,
+        "day": 11
+      },
+      "end": {
+        "year": 1095,
+        "month": 3,
+        "day": 11
+      },
+      "public": true
+    },
+    {
+      "name": "By Lamplight and Quill",
+      "arc": "Arc 1 - Shadows over Durendal",
+      "status": "Completed",
+      "start": {
+        "year": 1095,
+        "month": 3,
+        "day": 15
+      },
+      "end": {
+        "year": 1095,
+        "month": 3,
+        "day": 15
+      },
       "public": true
     }
   ],
-  "crafts": [],
+  "crafts": [
+    {
+      "character": "Lionel",
+      "name": "Lesser Restoration spell scroll (50gp)",
+      "total": 2,
+      "progress": 0,
+      "public": true
+    },
+    {
+      "character": "Crixus",
+      "name": "Ankheg Chitin Mail (125gp)",
+      "total": 7,
+      "progress": 0,
+      "public": true
+    },
+    {
+      "character": "John",
+      "name": "Poisoners Kit Proficiency (30gp)",
+      "total": 15,
+      "progress": 0,
+      "public": true
+    }
+  ],
   "events": []
 }
