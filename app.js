@@ -7,11 +7,12 @@ var HOLIDAYS = [{"month": 0, "day": 1, "name": "New Dawn", "deity": "The Changeb
 var BUILTIN_TAGS = ["Adventure","Travel","Downtime","Crafting","Rest"];
 var DEFAULT_STATE = {"current": {"year": 1095, "month": 0, "day": 1}, "view": {"year": 1095, "month": 0}, "days": {}, "customTags": [], "quickTags": [], "arcs": [], "quests": [], "crafts": [], "events": []};
 var STORAGE_KEY = "teleevandros_fresh_dm";
+var BACKUP_KEY = "teleevandros_fresh_dm_backups";
 var MODE_KEY = "teleevandros_fresh_mode";
 var SHARED_URL = "./campaign-data.json";
 
 var isDM = window.localStorage.getItem(MODE_KEY) === "true";
-var state = loadLocalState();
+var state = isDM ? loadLocalState() : clone(DEFAULT_STATE);
 var undoStack = [];
 var redoStack = [];
 
@@ -58,9 +59,65 @@ function loadLocalState() {
     return clone(DEFAULT_STATE);
   }
 }
+function readBackupStack() {
+  try {
+    var raw = window.localStorage.getItem(BACKUP_KEY);
+    var list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list : [];
+  } catch (e) {
+    return [];
+  }
+}
+function writeBackupStack(list) {
+  try {
+    window.localStorage.setItem(BACKUP_KEY, JSON.stringify(list.slice(-30)));
+  } catch (e) {}
+}
+function preservePreviousDmState(previousRaw) {
+  if (!previousRaw) return;
+  var backups = readBackupStack();
+  if (backups.length && backups[backups.length-1].data === previousRaw) return;
+  backups.push({savedAt:new Date().toISOString(),data:previousRaw});
+  writeBackupStack(backups);
+}
 function saveLocalState() {
   if (!isDM) return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  var nextRaw = JSON.stringify(state);
+  var previousRaw = window.localStorage.getItem(STORAGE_KEY);
+  if (previousRaw === nextRaw) return;
+  preservePreviousDmState(previousRaw);
+  window.localStorage.setItem(STORAGE_KEY, nextRaw);
+}
+function restorePreviousDmBackup() {
+  if (!isDM) return;
+  var backups = readBackupStack();
+  if (!backups.length) {
+    showToast("No DM backup available");
+    return;
+  }
+  var entry = backups.pop();
+  writeBackupStack(backups);
+  preservePreviousDmState(window.localStorage.getItem(STORAGE_KEY));
+  window.localStorage.setItem(STORAGE_KEY, entry.data);
+  state = normalize(JSON.parse(entry.data));
+  undoStack = [];
+  redoStack = [];
+  renderAll();
+  showToast("Previous DM backup restored");
+}
+function downloadDmBackup() {
+  if (!isDM) return;
+  saveLocalState();
+  var raw = window.localStorage.getItem(STORAGE_KEY) || JSON.stringify(state);
+  var blob = new Blob([raw], {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "teleevandros-dm-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+  showToast("DM backup downloaded");
 }
 function dayOrdinal(d) { return d.year * 336 + d.month * 28 + (d.day - 1); }
 function fromOrdinal(n) {
@@ -386,10 +443,13 @@ async function loadShared(){
     var res=await fetch(SHARED_URL+"?t="+Date.now(),{cache:"no-store"});
     if(!res.ok)throw new Error("Could not load campaign-data.json");
     var shared=normalize(await res.json());
-    if(!isDM)state=shared;
-    else if(!window.localStorage.getItem(STORAGE_KEY))state=shared;
-    renderAll();
-    showToast("Calendar updated");
+    if(!isDM) {
+      state=shared;
+      renderAll();
+      showToast("Calendar updated");
+    } else {
+      showToast("Shared calendar checked");
+    }
   }catch(err){
     setStatus("Shared calendar could not be loaded. "+err.message);
   }
@@ -421,13 +481,29 @@ function bindEvents(){
   byId("scrim").addEventListener("click",closeDrawer);
 
   byId("toggleDmButton").addEventListener("click",function(){
-    isDM=!isDM;
-    window.localStorage.setItem(MODE_KEY,String(isDM));
-    if(!isDM)loadShared();else renderAll();
+    if (isDM) {
+      saveLocalState();
+      isDM=false;
+      window.localStorage.setItem(MODE_KEY,"false");
+      state=clone(DEFAULT_STATE);
+      undoStack=[];
+      redoStack=[];
+      renderAll();
+      loadShared();
+    } else {
+      isDM=true;
+      window.localStorage.setItem(MODE_KEY,"true");
+      state=loadLocalState();
+      undoStack=[];
+      redoStack=[];
+      renderAll();
+    }
     closeDrawer();
   });
   byId("refreshButton").addEventListener("click",loadShared);
   byId("downloadSharedButton").addEventListener("click",downloadShared);
+  byId("downloadDmBackupButton").addEventListener("click",downloadDmBackup);
+  byId("restoreDmBackupButton").addEventListener("click",restorePreviousDmBackup);
 
   byId("advanceButton").addEventListener("click",function(){advanceDays(1,state.quickTags);});
   byId("backButton").addEventListener("click",function(){snapshot();state.current=addDays(state.current,-1);state.view={year:state.current.year,month:state.current.month};renderAll();});
@@ -509,7 +585,7 @@ function bindEvents(){
     openEditor("Set Current Date",dateFields(state.current),function(v){snapshot();state.current={year:parseInt(v.year,10),month:parseInt(v.month,10),day:parseInt(v.day,10)};state.view={year:state.current.year,month:state.current.month};});
   });
   byId("resetLocalButton").addEventListener("click",function(){
-    if(confirm("Erase local DM data?")){window.localStorage.removeItem(STORAGE_KEY);state=clone(DEFAULT_STATE);undoStack=[];redoStack=[];renderAll();closeDrawer();}
+    if(confirm("Erase local DM data AND its automatic backup history?")){window.localStorage.removeItem(STORAGE_KEY);window.localStorage.removeItem(BACKUP_KEY);state=clone(DEFAULT_STATE);undoStack=[];redoStack=[];renderAll();closeDrawer();}
   });
 }
 

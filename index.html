@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=1">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png?v=1">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <div class="app">
@@ -113,8 +113,10 @@
     <button id="refreshButton" type="button">Check for Updates</button>
     <button id="setDateButton" class="dm-only" type="button">Set Current Date</button>
     <button id="downloadSharedButton" class="dm-only" type="button">Download Shared Update</button>
+    <button id="downloadDmBackupButton" class="dm-only" type="button">Download DM Backup</button>
+    <button id="restoreDmBackupButton" class="dm-only" type="button">Restore Previous DM Backup</button>
     <button id="resetLocalButton" class="danger dm-only" type="button">Erase Local DM Data</button>
-    <p class="drawer-note">DM changes save on this device. “Download Shared Update” creates the player-facing campaign-data.json.</p>
+    <p class="drawer-note">DM data is kept separate from Player View and automatically versioned on this device. “Download Shared Update” creates the player-facing campaign-data.json.</p>
   </aside>
   <div id="scrim" class="scrim"></div>
 
@@ -186,6 +188,6 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>
