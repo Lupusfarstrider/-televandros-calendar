@@ -6,13 +6,26 @@
   },
   "view": {
     "year": 1095,
-    "month": 0
+    "month": 3
   },
   "days": {},
   "customTags": [],
   "quickTags": [],
   "arcs": [],
-  "quests": [],
+  "quests": [
+    {
+      "name": "Farts for hire",
+      "arc": "",
+      "status": "Active",
+      "start": {
+        "year": 1095,
+        "month": 0,
+        "day": 1
+      },
+      "end": null,
+      "public": true
+    }
+  ],
   "crafts": [],
   "events": []
 }
