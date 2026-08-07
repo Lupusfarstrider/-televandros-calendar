@@ -15,6 +15,26 @@ var state = loadLocalState();
 var undoStack = [];
 var redoStack = [];
 
+async function removeLegacyOfflineCache(){
+  try{
+    if("serviceWorker" in navigator){
+      var regs = await navigator.serviceWorker.getRegistrations();
+      for(var i=0;i<regs.length;i++){
+        await regs[i].unregister();
+      }
+    }
+    if("caches" in window){
+      var names = await caches.keys();
+      for(var j=0;j<names.length;j++){
+        await caches.delete(names[j]);
+      }
+    }
+  }catch(e){
+    console.warn("Legacy cache cleanup skipped:", e);
+  }
+}
+
+
 function byId(id) { return document.getElementById(id); }
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
 function normalize(input) {
@@ -493,8 +513,9 @@ function bindEvents(){
   });
 }
 
-function boot(){
+async function boot(){
   try {
+    await removeLegacyOfflineCache();
     bindEvents();
     renderAll();
     loadShared();
