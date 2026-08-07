@@ -8,13 +8,11 @@
     "year": 1095,
     "month": 0
   },
-  "campaignStart": {
-    "year": 1095,
-    "month": 0,
-    "day": 1
-  },
   "days": {},
+  "customTags": [],
+  "quickTags": [],
   "arcs": [],
+  "quests": [],
   "crafts": [],
   "events": []
 }
