@@ -454,6 +454,68 @@ async function loadShared(){
     setStatus("Shared calendar could not be loaded. "+err.message);
   }
 }
+
+function looksLikeDmBackup(data) {
+  if (!data || typeof data !== "object") return false;
+  if (!data.current || typeof data.current !== "object") return false;
+  if (typeof data.current.year !== "number" || typeof data.current.month !== "number" || typeof data.current.day !== "number") return false;
+  if (data.current.month < 0 || data.current.month > 11 || data.current.day < 1 || data.current.day > 28) return false;
+  if (data.days != null && typeof data.days !== "object") return false;
+  if (data.arcs != null && !Array.isArray(data.arcs)) return false;
+  if (data.quests != null && !Array.isArray(data.quests)) return false;
+  if (data.crafts != null && !Array.isArray(data.crafts)) return false;
+  if (data.events != null && !Array.isArray(data.events)) return false;
+  if (data.customTags != null && !Array.isArray(data.customTags)) return false;
+  if (data.quickTags != null && !Array.isArray(data.quickTags)) return false;
+  return true;
+}
+
+async function importDmBackupFile(file) {
+  if (!isDM) return;
+  if (!file) return;
+
+  try {
+    var text = await file.text();
+    var parsed = JSON.parse(text);
+
+    if (!looksLikeDmBackup(parsed)) {
+      alert("That file does not look like a valid Tel'Evandros DM backup.");
+      return;
+    }
+
+    var imported = normalize(parsed);
+    var summary = [
+      "Date: " + formatDate(imported.current),
+      "Arcs: " + imported.arcs.length,
+      "Quests: " + imported.quests.length,
+      "Crafting projects: " + imported.crafts.length,
+      "World events: " + imported.events.length
+    ].join("\n");
+
+    var ok = confirm(
+      "Restore this DM backup?\n\n" +
+      summary +
+      "\n\nYour current DM state will be saved into the automatic backup history first."
+    );
+    if (!ok) return;
+
+    saveLocalState();
+    preservePreviousDmState(window.localStorage.getItem(STORAGE_KEY));
+
+    state = imported;
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    undoStack = [];
+    redoStack = [];
+    renderAll();
+    showToast("DM backup imported");
+  } catch (err) {
+    alert("That backup could not be imported. The file may be damaged or invalid.");
+    console.error(err);
+  } finally {
+    byId("importDmBackupInput").value = "";
+  }
+}
+
 function publicState(){
   var data=clone(state);
   data.quickTags=[];
@@ -503,6 +565,14 @@ function bindEvents(){
   byId("refreshButton").addEventListener("click",loadShared);
   byId("downloadSharedButton").addEventListener("click",downloadShared);
   byId("downloadDmBackupButton").addEventListener("click",downloadDmBackup);
+  byId("importDmBackupButton").addEventListener("click",function(){
+    if (!isDM) return;
+    byId("importDmBackupInput").click();
+  });
+  byId("importDmBackupInput").addEventListener("change",function(ev){
+    var file = ev.target.files && ev.target.files[0] ? ev.target.files[0] : null;
+    importDmBackupFile(file);
+  });
   byId("restoreDmBackupButton").addEventListener("click",restorePreviousDmBackup);
 
   byId("advanceButton").addEventListener("click",function(){advanceDays(1,state.quickTags);});

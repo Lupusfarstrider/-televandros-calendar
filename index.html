@@ -114,6 +114,8 @@
     <button id="setDateButton" class="dm-only" type="button">Set Current Date</button>
     <button id="downloadSharedButton" class="dm-only" type="button">Download Shared Update</button>
     <button id="downloadDmBackupButton" class="dm-only" type="button">Download DM Backup</button>
+    <button id="importDmBackupButton" class="dm-only" type="button">Import DM Backup</button>
+    <input id="importDmBackupInput" class="dm-only" type="file" accept=".json,application/json" hidden>
     <button id="restoreDmBackupButton" class="dm-only" type="button">Restore Previous DM Backup</button>
     <button id="resetLocalButton" class="danger dm-only" type="button">Erase Local DM Data</button>
     <p class="drawer-note">DM data is kept separate from Player View and automatically versioned on this device. “Download Shared Update” creates the player-facing campaign-data.json.</p>
@@ -188,6 +190,6 @@
 
   <div id="toast" class="toast"></div>
 
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
