@@ -1,0 +1,16 @@
+{
+  "name": "Tel'Evandros Campaign Calendar",
+  "short_name": "Tel Calendar",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#21180d",
+  "theme_color": "#21180d",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

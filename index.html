@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2b2114">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Tel'Evandros Calendar</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <header>
+    <div>
+      <h1>Tel'Evandros Calendar</h1>
+      <p id="dateHeading">1095 of the Third Age</p>
+    </div>
+    <button id="menuBtn" class="icon-btn" aria-label="Open tools">☰</button>
+  </header>
+
+  <main>
+    <section class="date-card">
+      <div>
+        <span class="eyebrow">Current Campaign Date</span>
+        <h2 id="currentDateText"></h2>
+        <p id="weekdayText"></p>
+      </div>
+      <div class="date-actions">
+        <button id="advanceDayBtn" class="primary">Advance Day</button>
+        <button id="advanceTimeBtn">Advance Multiple</button>
+      </div>
+    </section>
+
+    <section class="calendar-card">
+      <div class="calendar-toolbar">
+        <button id="prevMonthBtn" aria-label="Previous month">‹</button>
+        <div>
+          <h2 id="monthTitle"></h2>
+          <p id="monthMeta"></p>
+        </div>
+        <button id="nextMonthBtn" aria-label="Next month">›</button>
+      </div>
+      <div class="weekdays">
+        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+      </div>
+      <div id="calendarGrid" class="calendar-grid"></div>
+      <div class="legend">
+        <span><i class="dot adventure"></i>Adventure</span>
+        <span><i class="dot travel"></i>Travel</span>
+        <span><i class="dot downtime"></i>Downtime</span>
+        <span><i class="dot crafting"></i>Crafting</span>
+        <span><i class="dot rest"></i>Rest</span>
+        <span><i class="dot holy"></i>Holy Day</span>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel">
+        <div class="panel-head"><h3>Time Overview</h3><button id="resetStartBtn" class="text-btn">Set campaign start</button></div>
+        <div id="statsGrid" class="stats-grid"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><h3>Active Arc</h3><button id="addArcBtn" class="text-btn">New arc</button></div>
+        <div id="arcList" class="stack"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><h3>Crafting</h3><button id="addCraftBtn" class="text-btn">New project</button></div>
+        <div id="craftList" class="stack"></div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><h3>Upcoming Events</h3><button id="addEventBtn" class="text-btn">New event</button></div>
+        <div id="eventList" class="stack"></div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-head"><h2>Campaign Tools</h2><button id="closeDrawerBtn">×</button></div>
+  <button id="setDateBtn">Set current date</button>
+  <button id="exportBtn">Export backup</button>
+  <label class="file-button">Import backup<input id="importInput" type="file" accept=".json,application/json"></label>
+  <button id="clearDataBtn" class="danger">Erase local data</button>
+  <p class="small">Your calendar saves automatically on this device.</p>
+</aside>
+<div id="scrim" class="scrim"></div>
+
+<dialog id="dayDialog">
+  <form method="dialog" id="dayForm">
+    <h2 id="dayDialogTitle">Day Details</h2>
+    <input type="hidden" id="dayKeyInput">
+    <label>Activity
+      <select id="dayTypeInput">
+        <option value="">None</option>
+        <option value="adventure">Adventure</option>
+        <option value="travel">Travel</option>
+        <option value="downtime">Downtime</option>
+        <option value="crafting">Crafting</option>
+        <option value="rest">Rest</option>
+      </select>
+    </label>
+    <label>Notes<textarea id="dayNotesInput" rows="4" placeholder="What happened on this day?"></textarea></label>
+    <div class="dialog-actions"><button value="cancel">Cancel</button><button id="saveDayBtn" value="default" class="primary">Save</button></div>
+  </form>
+</dialog>
+
+<dialog id="advanceDialog">
+  <form method="dialog" id="advanceForm">
+    <h2>Advance Time</h2>
+    <label>Number of days<input id="advanceCountInput" type="number" min="1" max="365" value="1" required></label>
+    <label>Mark these days as
+      <select id="advanceTypeInput">
+        <option value="adventure">Adventure</option>
+        <option value="travel">Travel</option>
+        <option value="downtime">Downtime</option>
+        <option value="crafting">Crafting</option>
+        <option value="rest">Rest</option>
+        <option value="">Uncategorized</option>
+      </select>
+    </label>
+    <label>Shared note<input id="advanceNoteInput" type="text" placeholder="Optional"></label>
+    <div class="dialog-actions"><button value="cancel">Cancel</button><button id="confirmAdvanceBtn" value="default" class="primary">Advance</button></div>
+  </form>
+</dialog>
+
+<dialog id="simpleDialog">
+  <form method="dialog" id="simpleForm">
+    <h2 id="simpleTitle"></h2>
+    <div id="simpleFields"></div>
+    <div class="dialog-actions"><button value="cancel">Cancel</button><button id="simpleSaveBtn" value="default" class="primary">Save</button></div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
