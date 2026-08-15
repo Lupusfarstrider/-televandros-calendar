@@ -100,6 +100,21 @@
       ],
       "notes": "",
       "notePublic": false
+    },
+    "1095-3-17": {
+      "tags": [],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-18": {
+      "tags": [],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-19": {
+      "tags": [],
+      "notes": "",
+      "notePublic": false
     }
   },
   "customTags": [],
@@ -174,16 +189,30 @@
       "public": true
     },
     {
-      "character": "Crixus",
-      "name": "Ankheg Chitin Mail (125gp)",
+      "character": "Brim (50% decreased armor crafting time)",
+      "name": "Ankheg Chitin Splint Mail (50gp+1 Chitin plate)",
       "total": 7,
       "progress": 0,
       "public": true
     },
     {
       "character": "John",
-      "name": "Poisoners Kit Proficiency (30gp)",
-      "total": 15,
+      "name": "Poisoners kit proficiency (50gp)",
+      "total": 30,
+      "progress": 0,
+      "public": true
+    },
+    {
+      "character": "Lionel/Crixus",
+      "name": "Enspelled Longsword, Shriven -Uncommon (150gp+chitin plate)",
+      "total": 7,
+      "progress": 0,
+      "public": true
+    },
+    {
+      "character": "Leucis/Brim (50% decreased armor crafting time)",
+      "name": "Enspelled Chitin Splintmail - Uncommon (150gp+Chitin plate)",
+      "total": 4,
       "progress": 0,
       "public": true
     }
