@@ -2,7 +2,7 @@
   "current": {
     "year": 1095,
     "month": 3,
-    "day": 16
+    "day": 26
   },
   "view": {
     "year": 1095,
@@ -102,17 +102,72 @@
       "notePublic": false
     },
     "1095-3-17": {
-      "tags": [],
+      "tags": [
+        "Rest"
+      ],
       "notes": "",
       "notePublic": false
     },
     "1095-3-18": {
-      "tags": [],
+      "tags": [
+        "Rest"
+      ],
       "notes": "",
       "notePublic": false
     },
     "1095-3-19": {
-      "tags": [],
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-20": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-21": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-22": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-23": {
+      "tags": [
+        "Travel"
+      ],
+      "notes": "",
+      "notePublic": true
+    },
+    "1095-3-24": {
+      "tags": [
+        "Adventure"
+      ],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-26": {
+      "tags": [
+        "Adventure"
+      ],
+      "notes": "Defeated Calder Vale, destroyed the distillery, rescued Dragomir Vercolac",
+      "notePublic": true
+    },
+    "1095-3-25": {
+      "tags": [
+        "Travel"
+      ],
       "notes": "",
       "notePublic": false
     }
@@ -178,6 +233,22 @@
         "day": 15
       },
       "public": true
+    },
+    {
+      "name": "Missing Persons of the Plainsmeet",
+      "arc": "Arc 1 - Shadows over Durendal",
+      "status": "Completed",
+      "start": {
+        "year": 1095,
+        "month": 3,
+        "day": 23
+      },
+      "end": {
+        "year": 1095,
+        "month": 3,
+        "day": 23
+      },
+      "public": true
     }
   ],
   "crafts": [
@@ -192,28 +263,28 @@
       "character": "Brim (50% decreased armor crafting time)",
       "name": "Ankheg Chitin Splint Mail (50gp+1 Chitin plate)",
       "total": 7,
-      "progress": 0,
+      "progress": 7,
       "public": true
     },
     {
       "character": "John",
       "name": "Poisoners kit proficiency (50gp)",
       "total": 30,
-      "progress": 0,
+      "progress": 8,
       "public": true
     },
     {
       "character": "Lionel/Crixus",
       "name": "Enspelled Longsword, Shriven -Uncommon (150gp+chitin plate)",
       "total": 7,
-      "progress": 0,
+      "progress": 7,
       "public": true
     },
     {
       "character": "Leucis/Brim (50% decreased armor crafting time)",
       "name": "Enspelled Chitin Splintmail - Uncommon (150gp+Chitin plate)",
       "total": 4,
-      "progress": 0,
+      "progress": 4,
       "public": true
     }
   ],
