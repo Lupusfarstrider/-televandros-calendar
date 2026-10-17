@@ -1,12 +1,12 @@
 {
   "current": {
     "year": 1095,
-    "month": 3,
-    "day": 26
+    "month": 4,
+    "day": 1
   },
   "view": {
     "year": 1095,
-    "month": 3
+    "month": 4
   },
   "days": {
     "1095-3-4": {
@@ -170,6 +170,21 @@
       ],
       "notes": "",
       "notePublic": false
+    },
+    "1095-3-27": {
+      "tags": [],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-3-28": {
+      "tags": [],
+      "notes": "",
+      "notePublic": false
+    },
+    "1095-4-1": {
+      "tags": [],
+      "notes": "",
+      "notePublic": false
     }
   },
   "customTags": [],
@@ -256,7 +271,7 @@
       "character": "Lionel",
       "name": "Lesser Restoration spell scroll (50gp)",
       "total": 2,
-      "progress": 0,
+      "progress": 2,
       "public": true
     },
     {
@@ -270,7 +285,7 @@
       "character": "John",
       "name": "Poisoners kit proficiency (50gp)",
       "total": 30,
-      "progress": 8,
+      "progress": 14,
       "public": true
     },
     {
